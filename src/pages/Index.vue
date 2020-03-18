@@ -8,13 +8,13 @@
     
     <q-form method="post" ref="loginForm">
     	<div align="center">Login</div>
-	   <q-input color="teal" filled v-model="user" label="Usuário" class="q-pa-md">
+	   <q-input color="teal" filled v-model="user.user" label="Usuário" class="q-pa-md">
         <template v-slot:prepend>
           <q-icon name="accessibility" />
         </template>
        </q-input>
 
-       <q-input  color="teal" filled v-model="pwd" type="password" label="Password" class="q-pa-md">
+       <q-input  color="teal" filled v-model="user.pwd" type="password" label="Password" class="q-pa-md">
         <template v-slot:prepend>
           <q-icon name="vpn_key" />
         </template>
@@ -65,8 +65,10 @@ export default {
 
   data(){
   	return {
-  		user:'',
-  		pwd:'',
+  		user:{
+  			user:'',
+  			pwd:'',
+  		},
   		msgError:'',
   		errorDialogOpen:false,
   	}
@@ -84,27 +86,18 @@ export default {
   	},
 
     submit:function(evt){
-    	console.log(this.user,this.pwd)
-  //   	this.$refs.loginForm.validate().then(success => {
-  //   	  console.log('validate',success);
-		//   if (success) {
-		//     // yay, models are correct
-		//   }
-		//   else {
-		//     // oh no, user has filled in
-		//     // at least one invalid value
-		//   }
-		// });
-		
-		if(!this.user || !this.pwd){
+    	console.log(this.$axios);
+		if(!this.user.user || !this.user.pwd){
 			this.showDialog("Usuario e Senha devem ser preenchidos")
 		}else{
-			this.showDialog("Usuario invalido")
-		}
 
-		// to reset validations:
-		//this.$refs.myForm.resetValidation()
-		
+			this.showDialog("Usuario invalido")
+			this.user.user = "";
+			this.user.pwd = "";
+
+			this.$router.push("/main")
+
+		}
     },
   }
 }
