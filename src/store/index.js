@@ -13,17 +13,27 @@ Vue.use(Vuex)
  * async/await or return a Promise which resolves
  * with the Store instance.
  */
+import app from './app'
 
 export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
       // example
+      app
     },
 
     // enable strict mode (adds overhead!)
     // for dev mode only
     strict: process.env.DEV
   })
+
+
+  if (process.env.DEV && module.hot) {
+    module.hot.accept(['./app'], () => {
+      const newApp = require('./app').default
+      Store.hotUpdate({ modules: { app: newApp } })
+    })
+  }
 
   return Store
 }

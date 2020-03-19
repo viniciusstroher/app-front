@@ -1,5 +1,5 @@
 <template>
-  <q-page class="column flex flex-center justify-center">
+  <q-page class="column flex flex-center">
     
     <img
       alt="Quasar logo"
@@ -86,17 +86,18 @@ export default {
   	},
 
     submit:function(evt){
-    	console.log(this.$axios);
+    	//console.log(this.$axios);
 		if(!this.user.user || !this.user.pwd){
 			this.showDialog("Usuario e Senha devem ser preenchidos")
 		}else{
-
-			this.showDialog("Usuario invalido")
-			this.user.user = "";
-			this.user.pwd = "";
-
-			this.$router.push("/main")
-
+			self = this;
+			// console.log(this.$store.dispatch('app/feedbackCountAction',this.user))
+			this.$store.dispatch('app/authUserAction',this.user).then(function(){
+				self.user.user = "";
+				self.$router.push("/main")
+			}).catch(function(){
+				self.showDialog("Usuario invalido")
+			});
 		}
     },
   }
