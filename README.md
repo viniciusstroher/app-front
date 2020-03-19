@@ -6,6 +6,8 @@ Desenvolvido com quasar
 ## Install the dependencies
 ```bash
 npm install -g yarn
+npm install -g @quasar/cli
+
 yarn install
 
 ```
