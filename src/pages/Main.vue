@@ -7,12 +7,12 @@
     <div class="row q-mt-xl">
     
        <q-btn color="green" @click="like()" class="q-ma-md">
-		    <q-icon left size="2em" name="thumb_up" /> Curtir <span v-if="feedback.user.like"> X </span>
+		    <q-icon left size="2em" name="thumb_up" /> Curtir <span class="q-ml-xs" v-if="feedback.user.like"> <q-icon left size="2em" name="navigate_before" /> </span>
 		</q-btn>
 
 
 		<q-btn color="green" @click="dislike()" class="q-ma-md">
-	      <q-icon left size="2em" name="thumb_down" /> Não Curtir <span v-if="feedback.user.dislike"> X </span>
+	      <q-icon left size="2em" name="thumb_down" /> Não Curtir <span class="q-ml-xs" v-if="feedback.user.dislike"> <q-icon left size="2em" name="navigate_before" /> </span>
 	    </q-btn>
 
     </div>
@@ -75,7 +75,6 @@ export default {
   methods:{
   	
   	like:function(){
-  		
   		this.feedback.user.like = true;
   		this.feedback.user.dislike = false;
   		this.feedbackSet(this.feedback.user.like,this.feedback.user.dislike)
@@ -90,7 +89,7 @@ export default {
   	feedbackRefresh:function(){
   		this.feedbackGet()
   		this.feedbackCount()
-  	}
+  	},
 
   	feedbackGet:function(){
   		self = this
@@ -109,9 +108,12 @@ export default {
   					dislike:dislike}
 
 	    this.$store.dispatch('app/feedbackPutAction',data).then(function(){
+	    	
 	    	self.feedback.user.dislike = self.$store.getters['app/feedbackUserGetter'].dislike
 	    	self.feedback.user.like = self.$store.getters['app/feedbackUserGetter'].like
 	    	self.feedbackRefresh()
+	    	
+	    	
 	    })
 
   	},
@@ -128,7 +130,11 @@ export default {
 
   	back:function() {
   		//LOGOFF
-  		this.$router.push("/");
+  		self = this
+  		this.$store.dispatch('app/logoutAction').then(function(){
+  			self.$router.push("/");
+  		});
+  		
   	}
   }
 }

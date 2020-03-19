@@ -54,6 +54,15 @@ export function authUserAction (context,payload) {
 	});
 }
 
+export function logoutAction (context,payload) {
+
+	return new Promise(function(resolve,reject){
+		localStorage.removeItem('user')
+		localStorage.removeItem('token')
+		resolve({"success":true,"message":"logout"});
+	});
+}
+
 export function feedbackPutAction (context,payload) {
 
 	return new Promise(function(resolve,reject){
