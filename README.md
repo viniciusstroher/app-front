@@ -1,4 +1,4 @@
-# Quasar App (app-front)
+# App-front
 Nodeversion >= 10.18.1  
 
 Desenvolvido com quasar 
