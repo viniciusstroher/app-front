@@ -77,6 +77,10 @@ export default {
   	if (localStorage.getItem('user')) {
   		this.user.user = localStorage.getItem('user')
   	}
+
+    if(localStorage.getItem("token")){
+      self.$router.push("/main")
+    }
   },
   methods:{
   	
@@ -91,22 +95,22 @@ export default {
 
     submit:function(evt){
     	//console.log(this.$axios);
-		if(!this.user.user || !this.user.pwd){
-			this.showDialog("Usuario e Senha devem ser preenchidos")
-		}else{
-			localStorage.setItem('user',this.user.user)
-			self = this;
-			// console.log(this.$store.dispatch('app/feedbackCountAction',this.user))
-			this.$store.dispatch('app/authUserAction',this.user).then(function(){
-				let user = self.$store.getters['app/authUserGetter']
-				localStorage.setItem('token',user.token)
-				
-				self.user.user = "";
-				self.$router.push("/main")
-			}).catch(function(){
-				self.showDialog("Usuario invalido")
-			});
-		}
+  		if(!this.user.user || !this.user.pwd){
+  			this.showDialog("Usuario e Senha devem ser preenchidos")
+  		}else{
+  			localStorage.setItem('user',this.user.user)
+  			self = this;
+  			// console.log(this.$store.dispatch('app/feedbackCountAction',this.user))
+  			this.$store.dispatch('app/authUserAction',this.user).then(function(){
+  				let user = self.$store.getters['app/authUserGetter']
+  				localStorage.setItem('token',user.token)
+  				
+  				self.user.user = "";
+  				self.$router.push("/main")
+  			}).catch(function(){
+  				self.showDialog("Usuario invalido")
+  			});
+  		}
     },
   }
 }
