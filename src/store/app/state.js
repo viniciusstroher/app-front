@@ -2,7 +2,7 @@ export default function () {
   return {
     //
     user:{
-    	token:0,
+    	token:null,
     	user:null,
     },
     feedback:{
@@ -11,8 +11,8 @@ export default function () {
     		dislike:null
     	},
     	count:{
-    		like:0,
-    		dislike:0
+    		likes:0,
+    		dislikes:0
     	}
     }
   }

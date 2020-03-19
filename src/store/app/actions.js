@@ -54,7 +54,7 @@ export function authUserAction (context,payload) {
 	});
 }
 
-export function feedbackAction (context,payload) {
+export function feedbackPutAction (context,payload) {
 
 	return new Promise(function(resolve,reject){
 		if(!payload.token){
@@ -77,7 +77,35 @@ export function feedbackAction (context,payload) {
 		    'Authorization': 'Bearer '+payload.token
 		  }
 		}).then(function(res){
-			resolve({"success":true,"message":"realizado feedback","data":res});
+			let data = {}
+			data.like = res.data.like;
+			data.dislike = res.data.dislike;
+			
+			context.commit('updateFeedbackUserMutation', data)
+			resolve({"success":true,"message":"realizado feedback","data":data});
+		}).catch(function (error) {
+		    reject(error);
+		});
+	})
+}
+
+export function feedbackGetAction (context,payload) {
+
+	return new Promise(function(resolve,reject){
+		if(!payload.token){
+			reject({"message":"parametro token não foi passado"});
+		}
+
+		axios.get(url+'/feedback',{
+		  headers: {
+		    'Authorization': 'Bearer '+payload.token
+		  }
+		}).then(function(res){
+			let data = {}
+			data.like = res.data.like;
+			data.dislike = res.data.dislike;
+			context.commit('updateFeedbackUserMutation', data)
+			resolve({"success":true,"message":"consultando feedback","data":data});
 		}).catch(function (error) {
 		    reject(error);
 		});
@@ -96,6 +124,8 @@ export function feedbackCountAction (context,payload) {
 		    'Authorization': 'Bearer '+payload.token
 		  }
 		}).then(function(res){
+			let data = res.data
+			context.commit('updateFeedbackCountMutation', data)
 			resolve({"success":true,"message":"contagem","data":res});
 		}).catch(function (error) {
 		    reject(error);

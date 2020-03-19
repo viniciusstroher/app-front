@@ -7,12 +7,12 @@
     <div class="row q-mt-xl">
     
        <q-btn color="green" @click="like()" class="q-ma-md">
-		    <q-icon left size="2em" name="thumb_up" /> Curtir
+		    <q-icon left size="2em" name="thumb_up" /> Curtir <span v-if="feedback.user.like"> X </span>
 		</q-btn>
 
 
 		<q-btn color="green" @click="dislike()" class="q-ma-md">
-	      <q-icon left size="2em" name="thumb_down" /> Não Curtir 
+	      <q-icon left size="2em" name="thumb_down" /> Não Curtir <span v-if="feedback.user.dislike"> X </span>
 	    </q-btn>
 
     </div>
@@ -21,14 +21,14 @@
     	<div class="flex flex-center q-pa-xs">
     		<q-icon left size="2em" name="thumb_up" />
     	</div>
-    	<div> Total Curtidas: {{feedback.count.like}} </div>
+    	<div> Total Curtidas: {{feedback.count.likes}} </div>
     </div>
     
     <div class="row">
     	<div class="flex flex-center q-pa-xs">
     		<q-icon left size="2em" name="thumb_down" />
     	</div>
-    	<div> Total Não Curtidas: {{feedback.count.dislike}} </div>
+    	<div> Total Não Curtidas: {{feedback.count.dislikes}} </div>
     </div>
     
 
@@ -62,36 +62,65 @@ export default {
 	  			dislike:null
   			},
   			count:{
-	  			like:0,
-	  			dislike:0
+	  			likes:0,
+	  			dislikes:0
 	  		}
   		},
   		
   	}
   },
   mounted () {
-    // this.$store.dispatch('loadCoins')
+  	this.feedbackGet()
+  	this.feedbackCount()
   },
   methods:{
   	
   	like:function(){
-  		this.feedback.like = true;
-  		this.feedback.dislike = false;
-  		//action
+  		
+  		this.feedback.user.like = true;
+  		this.feedback.user.dislike = false;
+  		this.feedbackSet(this.feedback.user.like,this.feedback.user.dislike)
   	},
   	
   	dislike:function(){
-  		this.feedback.dislike = true;
-  		this.feedback.like = false;
-  		//action
+  		this.feedback.user.dislike = true;
+  		this.feedback.user.like = false;
+  		this.feedbackSet(this.feedback.user.like,this.feedback.user.dislike)
   	},
   	
-  	count:function(){
+  	feedbackGet:function(){
+  		self = this
+  		let data = {token:this.$store.getters['app/authUserGetter'].token}
   		
-  		//action
+	    this.$store.dispatch('app/feedbackGetAction',data).then(function(){
+	    	self.feedback.user.dislike = self.$store.getters['app/feedbackUserGetter'].dislike
+	    	self.feedback.user.like = self.$store.getters['app/feedbackUserGetter'].like
+	    })
   	},
 
-  	back:function(argument) {
+  	feedbackSet:function(like,dislike){
+  		self = this
+  		let data = {token:this.$store.getters['app/authUserGetter'].token,
+  					like:like,
+  					dislike:dislike}
+
+	    this.$store.dispatch('app/feedbackPutAction',data).then(function(){
+	    	self.feedback.user.dislike = self.$store.getters['app/feedbackUserGetter'].dislike
+	    	self.feedback.user.like = self.$store.getters['app/feedbackUserGetter'].like
+	    })
+  	},
+
+  	feedbackCount:function(){
+  		self = this;
+  		let data = {token:this.$store.getters['app/authUserGetter'].token}
+	    
+	    this.$store.dispatch('app/feedbackCountAction',data).then(function(){
+	    	self.feedback.count.dislikes = self.$store.getters['app/feedbackCountGetter'].dislikes
+	    	self.feedback.count.likes = self.$store.getters['app/feedbackCountGetter'].likes
+	    })
+  	},
+
+  	back:function() {
   		//LOGOFF
   		this.$router.push("/");
   	}

@@ -16,12 +16,12 @@ export const updateFeedbackMutation = (state, feedback) => {
   state.feedback = feedback
 }
 
-export const updateFeedbackUserMutation = (state, feedback) => {
+export const updateFeedbackUserMutation = (state, user) => {
   console.log('updateFeedbackUserMutation','atualizando feedback user')
-  state.feedback.user = feedback.user
+  state.feedback.user = user
 }
 
-export const updateFeedbackCountMutation = (state, feedback) => {
+export const updateFeedbackCountMutation = (state, count) => {
   console.log('updateFeedbackCountMutation','atualizando feedback count')
-  state.feedback.count = feedback.count
+  state.feedback.count = count
 }
