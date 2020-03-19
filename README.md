@@ -1,4 +1,5 @@
 # Quasar App (app-front)
+Nodeversion >= 10.18.1  
 
 A Quasar Framework app
 
