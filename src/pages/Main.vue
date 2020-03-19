@@ -70,8 +70,7 @@ export default {
   	}
   },
   mounted () {
-  	this.feedbackGet()
-  	this.feedbackCount()
+  	this.feedbackRefresh()
   },
   methods:{
   	
@@ -88,6 +87,11 @@ export default {
   		this.feedbackSet(this.feedback.user.like,this.feedback.user.dislike)
   	},
   	
+  	feedbackRefresh:function(){
+  		this.feedbackGet()
+  		this.feedbackCount()
+  	}
+
   	feedbackGet:function(){
   		self = this
   		let data = {token:this.$store.getters['app/authUserGetter'].token}
@@ -107,7 +111,9 @@ export default {
 	    this.$store.dispatch('app/feedbackPutAction',data).then(function(){
 	    	self.feedback.user.dislike = self.$store.getters['app/feedbackUserGetter'].dislike
 	    	self.feedback.user.like = self.$store.getters['app/feedbackUserGetter'].like
+	    	self.feedbackRefresh()
 	    })
+
   	},
 
   	feedbackCount:function(){
